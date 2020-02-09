@@ -1,5 +1,5 @@
 """/duel command."""
-
+# TODO - REWORK DUELS
 from datetime import timedelta
 
 from telegram import Update
@@ -55,7 +55,7 @@ def _try_to_duel(update: Update, context: CallbackContext) -> None:
                  _get_user_str(update, init_id), init_tag),
                 (targ_name, targ_id,
                  _get_user_str(update, targ_id), targ_tag)
-                ]
+            ]
             # Get the winner and the loser. Check 1
             winners, losers = [], []
             for player in participant_list:
@@ -96,9 +96,9 @@ def _get_user_str(update: Update, userid: int) -> float:
     from main.constants import DUELDICT as DD
     user_score = User_Stats[Users[userid], Chats[update.message.chat.id]]
     strength = randomizer.uniform(DD['LOW_BASE_ACCURACY'], DD['HIGH_BASE_ACCURACY']) \
-               + user_score.kills * DD['KILLMULT'] \
-               + user_score.deaths * DD['DEATHMULT'] \
-               + user_score.misses * DD['MISSMULT']
+        + user_score.kills * DD['KILLMULT'] \
+        + user_score.deaths * DD['DEATHMULT'] \
+        + user_score.misses * DD['MISSMULT']
     return min(strength, DD['STRENGTHCAP'])
 
 
@@ -153,7 +153,8 @@ def _score_the_results(update: Update, winners: list, losers: list,
 
 
 @run_async
-def _conclude_the_duel(update: Update, context: CallbackContext, result: str, participants) -> None:
+def _conclude_the_duel(update: Update, context: CallbackContext,
+                       result: str, participants: list) -> None:
     """Send all the messages for the duel."""
     from time import sleep
     # Send the initial message
@@ -168,4 +169,4 @@ def _conclude_the_duel(update: Update, context: CallbackContext, result: str, pa
             text=phrase,
             message_id=botmsg.message_id,
             parse_mode='Markdown'
-            )
+        )

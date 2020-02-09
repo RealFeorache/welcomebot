@@ -126,11 +126,11 @@ def cooldown(update: Update, context: CallbackContext) -> bool:
     # Don't do
     if not error_sent:
         remaining = last_command + \
-                    timedelta(minutes=chat_cooldown) - datetime.now()
+            timedelta(minutes=chat_cooldown) - datetime.now()
         update.message.reply_text(
             (f'До вашей следующей команды {remaining.seconds} секунд.\n'
              'Ошибку на задержку даю только один раз, запоминай.')
-            )
+        )
         Cooldowns[Users[sender.id],
                   Chats[update.message.chat.id]].error_sent = 1
     return True
@@ -143,7 +143,7 @@ def set_cooldown(update: Update, success: bool) -> None:
         to_set = datetime.now()
     else:
         to_set = datetime.now() - \
-                 timedelta(minutes=Options[Chats[update.message.chat.id]].cooldown)
+            timedelta(minutes=Options[Chats[update.message.chat.id]].cooldown)
     Cooldowns[Users[update.message.from_user.id],
               Chats[update.message.chat.id]].last_command = to_set
 
@@ -161,7 +161,7 @@ def ping(context: CallbackContext):
         chat_id=PING_CHANNEL,
         text='ping...',
         disable_notification=True
-        )
+    )
 
 
 # Add user updater to use for pidor, duelranking

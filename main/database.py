@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from pony.orm import *
@@ -58,7 +58,8 @@ class Options(db.Entity):
 class Cooldowns(db.Entity):
     user_id = Required(Users)
     chat_id = Required(Chats)
-    last_command = Required(datetime, default=lambda: datetime.now())
+    last_command = Required(
+        datetime, default=lambda: datetime.now() - timedelta(minutes=10))
     error_sent = Required(int, default=0)
     PrimaryKey(user_id, chat_id)
 

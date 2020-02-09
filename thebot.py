@@ -29,7 +29,7 @@ USERCOMMANDS = [
     ("help", commands.bothelp, 'Меню помощи'),
     ('whatsnew', commands.whatsnew, 'Новое в боте'),
     ('adminmenu', commands.adminmenu, 'Админское меню'),
-    ]
+]
 ONLYADMINCOMMANDS = [
     'Команды для администраторов групп',
     ('leave', commands.leave, 'Сказать боту уйти'),
@@ -38,7 +38,7 @@ ONLYADMINCOMMANDS = [
      'Добавить пользователю иммунитет на задержку команд (ответить ему)'),
     ('unimmune', commands.unimmune, 'Снять иммунитет (ответить или имя)'),
     ('immunelist', commands.immunelist, 'Лист людей с иммунитетом')
-    ]
+]
 UNUSUALCOMMANDS = [
     'Нечастые команды',
     ('allcommands', commands.allcommands, 'Все команды бота'),
@@ -46,7 +46,7 @@ UNUSUALCOMMANDS = [
     ('getlogs', commands.getlogs,
      'Получить логи бота (только для разработчика)'),
     ('getdatabase', commands.getdatabase, 'Получить датабазу')
-    ]
+]
 
 
 def main():
@@ -55,14 +55,19 @@ def main():
     # Add command handles
     for commandlists in (USERCOMMANDS, ONLYADMINCOMMANDS, UNUSUALCOMMANDS):
         for command in commandlists[1:]:
-            dispatcher.add_handler(CommandHandler(command[0], command[1]))
+            dispatcher.add_handler(CommandHandler(
+                command[0], command[1],
+                filters=(~Filters.update.edited_message & Filters.command)))
     # Add message handlers
     dispatcher.add_handler(MessageHandler(
-        Filters.status_update.new_chat_members, textfiltering.welcomer))
+        (Filters.status_update.new_chat_members &
+         ~Filters.update.edited_message), textfiltering.welcomer))
     dispatcher.add_handler(MessageHandler(
-        Filters.status_update.left_chat_member, textfiltering.farewell))
+        (Filters.status_update.left_chat_member &
+         ~Filters.update.edited_message), textfiltering.farewell))
     dispatcher.add_handler(MessageHandler(
-        Filters.text, textfiltering.message_filter))
+        (Filters.text &
+         ~Filters.update.edited_message), textfiltering.message_filter))
     # Log errors
     dispatcher.add_error_handler(error_callback)
     # Add job queue
