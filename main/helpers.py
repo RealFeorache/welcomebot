@@ -133,6 +133,12 @@ def cooldown(update: Update, context: CallbackContext) -> bool:
         )
         Cooldowns[Users[sender.id],
                   Chats[update.message.chat.id]].error_sent = 1
+    elif error_sent:
+        # Delete spam if error was already given.
+        if context.bot.get_chat_member(
+                chat_id=update.message.chat.id,
+                user_id=context.bot.id).can_delete_messages:
+            update.message.delete()
     return True
 
 
@@ -164,6 +170,15 @@ def ping(context: CallbackContext):
     )
 
 
-# Add user updater to use for pidor, duelranking
+@run_async
+def db_backup(context: CallbackContext):
+    """Job queue for sending database backups."""
+    context.bot.send_document(
+        chat_id=PING_CHANNEL,
+        document=open(DATABASE_NAME, 'rb')
+    )
+
+
+# TODO-Add user updater to use for pidor, duelranking
 def update_users(users: list) -> None:
     pass

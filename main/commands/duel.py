@@ -1,5 +1,5 @@
 """/duel command."""
-# TODO - REWORK DUELS
+# TODO-REWORK DUELS
 from datetime import timedelta
 
 from telegram import Update

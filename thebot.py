@@ -2,10 +2,11 @@
 
 from telegram.ext import (CommandHandler, Filters,
                           MessageHandler)
+from datetime import time
 
 import main.commands as commands
 from main import LOGGER, dispatcher, textfiltering, updater
-from main.helpers import error_callback, ping
+from main.helpers import error_callback, ping, db_backup
 
 
 # Bot commands
@@ -71,9 +72,10 @@ def main():
     # Log errors
     dispatcher.add_error_handler(error_callback)
     # Add job queue
-    job_queue = updater.job_queue
-    job_queue.run_repeating(
-        callback=ping, interval=60 * 60, first=0, name='ping')
+    updater.job_queue.run_repeating(
+        callback=ping, interval=60 * 60, first=0)
+    updater.job_queue.run_daily(
+        callback=db_backup, time=time(23, 0, 0, 0))
     # Start polling
     updater.start_polling(clean=True)
     LOGGER.info('Polling started.')

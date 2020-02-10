@@ -7,7 +7,7 @@ from telegram.ext import CallbackContext
 from telegram.ext.dispatcher import run_async
 
 from main import LOGGER
-from main.constants import DEVS, DATABASE_NAME
+from main.constants import DEVS, DATABASE_NAME, PING_CHANNEL
 
 
 @run_async
@@ -23,7 +23,7 @@ def getlogs(update: Update, context: CallbackContext):
             chat_id=update.effective_chat.id,
             document=open('logs.log', 'rb'),
             filename=f'{filename}.log'
-            )
+        )
     except (EOFError, FileNotFoundError) as changelog_err:
         LOGGER.error(changelog_err)
         update.message.reply_text('Не смог добраться до логов. Что-то не так.')
@@ -44,7 +44,7 @@ def getdatabase(update: Update, context: CallbackContext):
         context.bot.send_document(
             chat_id=update.effective_chat.id,
             document=open(DATABASE_NAME, 'rb')
-            )
+        )
     except (EOFError, FileNotFoundError) as database_err:
         LOGGER.error(database_err)
         update.message.reply_text('Не смог добраться до базы. Что-то не так.')

@@ -2,7 +2,7 @@
 
 # Admin id
 # Add developer ID for passing the spam check and other commands
-DEVS = [255295801]
+DEVS = [255295801, 205762941]
 # Add a ping channel
 PING_CHANNEL = -353404420
 
@@ -43,7 +43,7 @@ DUELDICT = {
     'DEATHMULTPERC': DEATHMULTPERC,
     'MISSMULTPERC': MISSMULTPERC,
     'ADDITIONALPERCENTCAP': ADDITIONALPERCENTCAP
-    }
+}
 # -----------------------------------------------------------
 
 # Antispam constants
