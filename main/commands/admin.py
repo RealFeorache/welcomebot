@@ -128,9 +128,11 @@ def setcooldown(update: Update, context: CallbackContext):
     """Change the chat cooldown."""
     try:
         new_cooldown = int(update.message.text.split()[1])
+        if new_cooldown < 0:
+            raise ValueError
         Options[Chats[update.message.chat.id]].cooldown = new_cooldown
         reply = ('Новая задержка между командами установлена.\n'
                  f'Теперь задержка {new_cooldown} минут.')
     except (IndexError, ValueError):
-        reply = 'Неправильно использована команда.\nПример: /setduelcooldown 10'
+        reply = 'Неправильно использована команда.\nПример: /setduelcooldown 10.\nЧисло не может быть негативным или не целым.'
     update.message.reply_text(reply)
