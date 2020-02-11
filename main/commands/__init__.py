@@ -1,6 +1,6 @@
 """Module containing the main commands of the bot usable by the user."""
 
-from main.commands.admin import adminmenu, duelstatus, immune, immunelist, leave, unimmune
+from main.commands.admin import adminmenu, duelstatus, immune, immunelist, leave, unimmune, setcooldown
 from main.commands.animal import animal
 from main.commands.dadjoke import dadjoke
 from main.commands.dev import allcommands, getdatabase, getlogs

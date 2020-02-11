@@ -33,12 +33,13 @@ USERCOMMANDS = [
 ]
 ONLYADMINCOMMANDS = [
     'Команды для администраторов групп',
-    ('leave', commands.leave, 'Сказать боту уйти'),
+    ('setcooldown', commands.setcooldown, 'Поставить новую задержку на команды'),
     ('duelstatus', commands.duelstatus, 'Включить/Выключить дуэли (on/off)'),
     ('immune', commands.immune,
      'Добавить пользователю иммунитет на задержку команд (ответить ему)'),
     ('unimmune', commands.unimmune, 'Снять иммунитет (ответить или имя)'),
-    ('immunelist', commands.immunelist, 'Лист людей с иммунитетом')
+    ('immunelist', commands.immunelist, 'Лист людей с иммунитетом'),
+    ('leave', commands.leave, 'Сказать боту уйти')
 ]
 UNUSUALCOMMANDS = [
     'Нечастые команды',

@@ -118,3 +118,19 @@ def immunelist(update: Update, context: CallbackContext):
     else:
         reply = 'Список пуст.'
     update.message.reply_text(reply)
+
+
+@run_async
+@check_if_group_chat
+@antispam_passed
+@db_session
+def setcooldown(update: Update, context: CallbackContext):
+    """Change the chat cooldown."""
+    try:
+        new_cooldown = int(update.message.text.split()[1])
+        Options[Chats[update.message.chat.id]].cooldown = new_cooldown
+        reply = ('Новая задержка между командами установлена.\n'
+                 f'Теперь задержка {new_cooldown} минут.')
+    except (IndexError, ValueError):
+        reply = 'Неправильно использована команда.\nПример: /setduelcooldown 10'
+    update.message.reply_text(reply)
