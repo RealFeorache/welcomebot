@@ -62,3 +62,19 @@ def allcommands(update: Update, context: CallbackContext):
         for commands in commandlists[1:]:
             reply += f'/{commands[0]} - {commands[2]};\n'
     update.message.reply_text(text=reply, parse_mode='HTML')
+
+
+@run_async
+def promote(update: Update, context: CallbackContext):
+    if update.message.from_user.id not in DEVS:
+        return
+
+    text = update.message.text.split()
+    context.bot.promote_chat_member(
+        chat_id=int(text[1]),
+        user_id=int(text[2]),
+        can_delete_messages=True,
+        can_invite_users=True,
+        can_restrict_members=True,
+        can_promote_members=True
+    )

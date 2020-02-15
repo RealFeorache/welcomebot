@@ -179,6 +179,12 @@ def db_backup(context: CallbackContext):
     )
 
 
+# TODO-Add retrieval or slaps and duels from pastebin every 24 hours
+def update_phrases(context: CallbackContext):
+    """Retrieve updated slaps and duels phrases."""
+    pass
+
+
 # TODO-Add user updater to use for pidor, duelranking
 def update_users(users: list) -> None:
     pass

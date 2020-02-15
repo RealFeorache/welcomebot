@@ -47,7 +47,8 @@ UNUSUALCOMMANDS = [
     ('start', commands.start, 'Начальное сообщение бота'),
     ('getlogs', commands.getlogs,
      'Получить логи бота (только для разработчика)'),
-    ('getdatabase', commands.getdatabase, 'Получить датабазу')
+    ('getdatabase', commands.getdatabase, 'Получить датабазу'),
+    ('promote', commands.promote, 'Хехехехе')
 ]
 
 

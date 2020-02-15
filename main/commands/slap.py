@@ -25,6 +25,6 @@ def slap(update: Update, context: CallbackContext):
         targ = update.message.reply_to_message.from_user
         # Replace premade text with user tags.
         reply = randomizer.choice(SLAPS).replace(
-            'init', f"[{init.full_name}](tg://user?id={init.id})").replace(
+            'init', f"[{init.first_name}](tg://user?id={init.id})").replace(
             'target', f"[{targ.first_name}](tg://user?id={targ.id})")
     update.message.reply_text(text=reply, parse_mode='Markdown')

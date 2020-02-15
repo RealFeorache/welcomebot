@@ -3,7 +3,7 @@
 from main.commands.admin import adminmenu, duelstatus, immune, immunelist, leave, unimmune, setcooldown
 from main.commands.animal import animal
 from main.commands.dadjoke import dadjoke
-from main.commands.dev import allcommands, getdatabase, getlogs
+from main.commands.dev import allcommands, getdatabase, getlogs, promote
 from main.commands.duel import duel
 from main.commands.duelranking import duelranking
 from main.commands.duelscore import duelscore
