@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import CallbackContext, run_async
 
 from main.constants import REQUEST_TIMEOUT
-from main.helpers import antispam_passed
+from main.helpers import antispam_passed, ResetError
 
 
 @run_async
@@ -25,12 +25,13 @@ def animal(update: Update, context: CallbackContext):
         link = 'https://random.dog/woof.json'
     # Try to get the image/gif, check for connection to the server
     try:
-        response = requests.get(url=link, timeout=REQUEST_TIMEOUT).json()
+        response = requests.get(url=link, timeout=REQUEST_TIMEOUT)
+        response = response.json()
     except:
         update.message.reply_text(
             'Сервер не работает, интересно. Попробуйте позже.')
         # Reset cooldown
-        raise telegram.error.BadRequest
+        raise ResetError
     # Try to send chat action, check if the bot has the right to send messages
     context.bot.send_chat_action(update.message.chat.id, 'upload_photo')
     file_link = [item for item in response.values() if 'http' in str(item)][0]

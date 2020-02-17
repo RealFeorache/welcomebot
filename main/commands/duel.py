@@ -8,9 +8,10 @@ from telegram.ext import CallbackContext, run_async
 from commandPretexts.duels import DUELS
 from main import randomizer
 from main.database import *
-from main.helpers import ResetError, antispam_passed
+from main.helpers import ResetError, antispam_passed, check_if_group_chat
 
 
+@check_if_group_chat
 def duel(update: Update, context: CallbackContext):
     """Duel to solve any kind of argument."""
     # noinspection PyUnresolvedReferences
