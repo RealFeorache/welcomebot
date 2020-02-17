@@ -58,6 +58,8 @@ def admin_priv(update: Update, context: CallbackContext) -> bool:
 
     Enough rights are defined as the administrator or the developer.
     """
+    if update.message.chat.type == 'private':
+        return True
     admins = [u.user for u in context.bot.get_chat_administrators(
         update.message.chat.id)]
     if update.message.from_user in admins or \

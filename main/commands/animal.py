@@ -27,8 +27,8 @@ def animal(update: Update, context: CallbackContext):
     try:
         response = requests.get(url=link, timeout=REQUEST_TIMEOUT).json()
     except:
-        update.message.reply_text('Бот умер на пути к серверу. '
-                                  'Попробуйте ещё раз.')
+        update.message.reply_text(
+            'Сервер не работает, интересно. Попробуйте позже.')
         # Reset cooldown
         raise telegram.error.BadRequest
     # Try to send chat action, check if the bot has the right to send messages
@@ -42,19 +42,19 @@ def animal(update: Update, context: CallbackContext):
                 chat_id=update.message.chat.id,
                 video=file_link,
                 reply_to_message_id=update.message.message_id
-                )
+            )
         elif 'gif' in file_extension:
             context.bot.send_animation(
                 chat_id=update.message.chat.id,
                 animation=file_link,
                 reply_to_message_id=update.message.message_id
-                )
+            )
         else:
             context.bot.send_photo(
                 chat_id=update.message.chat.id,
                 photo=file_link,
                 reply_to_message_id=update.message.message_id
-                )
+            )
     except telegram.error.BadRequest:
         update.message.reply_text(
             'Недостаточно прав для отправки медиа файлов, вопросы к админу.\n'
