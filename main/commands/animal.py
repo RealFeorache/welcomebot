@@ -23,15 +23,13 @@ def animal(update: Update, context: CallbackContext):
     # Dog link
     else:
         link = 'https://random.dog/woof.json'
-    # Try to get the image/gif, check for connection to the server
-    try:
-        response = requests.get(url=link, timeout=REQUEST_TIMEOUT)
-        response = response.json()
-    except:
+    response = requests.get(url=link, timeout=REQUEST_TIMEOUT)
+    if response.status_code != requests.codes.ok:
         update.message.reply_text(
             'Сервер не работает, интересно. Попробуйте позже.')
         # Reset cooldown
         raise ResetError
+    response = response.json()
     # Try to send chat action, check if the bot has the right to send messages
     context.bot.send_chat_action(update.message.chat.id, 'upload_photo')
     file_link = [item for item in response.values() if 'http' in str(item)][0]

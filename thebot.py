@@ -77,7 +77,7 @@ def main():
     updater.job_queue.run_repeating(
         callback=ping, interval=60 * 60, first=0)
     updater.job_queue.run_daily(
-        callback=db_backup, time=time(23, 0, 0, 0))
+        callback=db_backup, time=time(0, 0, 0, 0))
     # Start polling
     updater.start_polling(clean=True)
     LOGGER.info('Polling started.')
