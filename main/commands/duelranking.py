@@ -14,16 +14,16 @@ from main.helpers import ResetError, antispam_passed, check_if_group_chat
 def duelranking(update: Update, context: CallbackContext):
     """Get the top best duelists."""
 
-    # TODO-Improve the desc to User_Stats.kills*3 + User_Stats.deaths*2 + User_Stats.misses*1
     query = select(q for q in User_Stats
                    if q.chat_id == Chats[update.message.chat.id]
                    ).order_by(
-        desc(User_Stats.kills))[:10]
+        lambda: desc(q.kills*3+q.deaths*2+q.misses*1))[:10]
     # Check if the chat table exists
     if not query:
         update.message.reply_text('Для этого чата нет данных.')
         raise ResetError
 
-    reply = '\n'.join(
-        [f'{c.user_id.full_name} - {c.kills}/{c.deaths}/{c.misses}' for c in query])
-    update.message.reply_text(reply)
+    reply = '***Имя - Убийства/Смерти/Промахи (топ 10)\n***'
+    reply += '\n'.join(
+        [f'#{c[0]} {c[1].user_id.full_name} - {c[1].kills}/{c[1].deaths}/{c[1].misses}' for c in enumerate(query, 1)])
+    update.message.reply_text(text=reply, parse_mode='Markdown')
