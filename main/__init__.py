@@ -28,7 +28,7 @@ LOGGER.info('Initializing the bot and creating database tables if needed...')
 
 # Bot initialization
 updater = Updater(token=environ.get("TG_BOT_TOKEN"),
-                  use_context=True)
+                  use_context=True, workers=32)
 dispatcher = updater.dispatcher
 
 # Create a randomizer

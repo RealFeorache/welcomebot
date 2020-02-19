@@ -13,12 +13,11 @@ THRESHOLDCAP = 80
 LOW_BASE_ACCURACY = 40
 HIGH_BASE_ACCURACY = 50
 # Exp multiplier for kills, deaths and misses
-KILLMULT = 0.37
+KILLMULT = 0.23
 DEATHMULT = -0.13
 MISSMULT = -0.06
 # Always lose percent
 ALWAYSLOSS = 0.05
-HARDRESETCHANCE = 0.0025  # 0.25%
 
 # DO NOT TOUCH
 # -----------------------------------------------------------
@@ -54,4 +53,4 @@ CDREDUCTION = round(0.7 * INDIVIDUAL_USER_DELAY)  # 70%
 SHORTCD = round(INDIVIDUAL_USER_DELAY - CDREDUCTION)
 
 # Request timeout time in seconds
-REQUEST_TIMEOUT = 3
+REQUEST_TIMEOUT = 5
