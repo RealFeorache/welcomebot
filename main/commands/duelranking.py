@@ -23,7 +23,7 @@ def duelranking(update: Update, context: CallbackContext):
         update.message.reply_text('Для этого чата нет данных.')
         raise ResetError
 
-    reply = '***Имя - Убийства/Смерти/Промахи (топ 10)\n***'
+    reply = '***Топ 10\n***'
     reply += '\n'.join(
-        [f'#{c[0]} {c[1].user_id.full_name} - {c[1].kills}/{c[1].deaths}/{c[1].misses}' for c in enumerate(query, 1)])
+        [f'#{c[0]} {c[1].user_id.full_name} - {c[1].kills}/{c[1].deaths}/{c[1].misses} - {round(c[1].kills*100/(c[1].kills+c[1].deaths) if (c[1].kills+c[1].deaths) != 0 else 0.0, 2)}%' for c in enumerate(query, 1)])
     update.message.reply_text(text=reply, parse_mode='Markdown')
