@@ -2,6 +2,7 @@
 
 from telegram import Update
 from telegram.ext import CallbackContext, run_async
+from telegram.error import BadRequest
 
 from main import randomizer
 from main.database import *
@@ -25,20 +26,26 @@ def pidor(update: Update, context: CallbackContext):
     chat_users = select(q.user_id for q in User_Stats
                         if q.chat_id == Chats[update.message.chat.id])[:][:]
     # Find a pidor that's still in the chat and delete those that are gone.
-    while True:
-        if not chat_users:
-            update.message.reply_text('Нужно больше данных')
-            raise ResetError
+    while chat_users:
         pidor = randomizer.choice(chat_users)
-        pidor_data = update.message.chat.get_member(user_id=pidor.id)
-        if pidor_data.status in ['restricted', 'left', 'kicked'] or \
-                pidor_data.user.is_bot:
+        try:
+            pidor_data = update.message.chat.get_member(user_id=pidor.id)
+            if pidor_data.status not in ['restricted', 'left', 'kicked'] and \
+                    not pidor_data.user.is_bot:
+                break
+            else:
+                delete(u for u in User_Stats
+                       if u.user_id == pidor
+                       and u.chat_id == Chats[update.message.chat.id])
+                chat_users.remove(pidor)
+        except BadRequest:
             delete(u for u in User_Stats
                    if u.user_id == pidor
                    and u.chat_id == Chats[update.message.chat.id])
             chat_users.remove(pidor)
-        else:
-            break
+    else:
+        update.message.reply_text('Нужно больше данных')
+        raise ResetError
     # Assign a tag
     Users[pidor.id].full_name = pidor_data.user.full_name
     pidor_tag = f'[{pidor.full_name}](tg://user?id={pidor.id})'
