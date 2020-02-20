@@ -8,7 +8,7 @@ from telegram.ext import CallbackContext, run_async
 
 from commandPretexts.duels import DUELS
 from main import randomizer
-from main.constants import THRESHOLDCAP, DUELDICT as DD, CDREDUCTION, SHORTCD
+from main.constants import THRESHOLDCAP, DUELDICT as DD
 from main.database import *
 from main.helpers import ResetError, antispam_passed, check_if_group_chat
 
@@ -58,11 +58,6 @@ class Dueler:
             user_stats.kills += dueler.outcome[0]
             user_stats.deaths += dueler.outcome[1]
             user_stats.misses += dueler.outcome[2]
-            # Shorten cooldown for the winner
-            if dueler.outcome == (1, 0, 0):
-                shortercd = datetime.now() - timedelta(seconds=CDREDUCTION)
-                Cooldowns[Users[dueler.user.id],
-                          Chats[dueler.chat.id]].last_command = shortercd
 
 
 @run_async
@@ -85,7 +80,6 @@ def duel(update: Update, context: CallbackContext) -> None:
 
 
 @run_async
-@antispam_passed
 def try_to_duel(update: Update, context: CallbackContext) -> None:
     """Try to duel. Main duel function."""
     # Shorten the code, format the names
@@ -114,13 +108,12 @@ def use_names(init: Dueler, target: Dueler) -> str:
         reply = randomizer.choice(DUELS['onedead']).replace(
             'winner', init.tag).replace('loser', target.tag)
         reply += f'\nПобеда за {init.tag}!'
-        reply += f'\n{init.tag}, твой кулдаун был ресетнут до {SHORTCD // 60}-х минут!'
     elif init.outcome == (0, 1, 0):
         reply = randomizer.choice(DUELS['onedead']).replace(
             'winner', target.tag).replace('loser', init.tag)
         reply += f'\nПобеда за {target.tag}!'
     elif init.outcome == (0, 0, 1):
-        reply = randomizer.choice(DUELS['alldead']).replace(
+        reply = randomizer.choice(DUELS['nonedead']).replace(
             'loser1', init.tag).replace('loser2', target.tag)
     return reply
 
