@@ -21,12 +21,25 @@ class Dueler:
         self.user = user
         self.chat = chat
         self.tag = f'[{self.user.full_name}](tg://user?id={self.user.id})'
-        win_chance = self.win_chance()
+
+    def duel(self, target) -> None:
+        """Duel another dueler and get the outcome."""
         win_req = randomizer.uniform(0, THRESHOLDCAP)
-        self.winner = True if win_chance > win_req else False
+        self.strength, target.strength = self._win_chance(), target._win_chance()
+        if self.strength < win_req and target.strength < win_req:
+            self.outcome, target.outcome = (0, 0, 1), (0, 0, 1)
+        else:
+            if self.strength > target.strength:
+                self.outcome, target.outcome = (1, 0, 0), (0, 1, 0)
+            elif self.strength < target.strength:
+                self.outcome, target.outcome = (0, 1, 0), (1, 0, 0)
+            elif self.strength == target.strength:
+                self.outcome, target.outcome = (1, 1, 0), (1, 1, 0)
+        # Record the result
+        self._record_result(target)
 
     @db_session
-    def win_chance(self) -> float:
+    def _win_chance(self) -> float:
         """User win chance for the duel."""
         user_stats = User_Stats[Users[self.user.id], Chats[self.chat.id]]
         strength = randomizer.uniform(DD['LOW_BASE_ACCURACY'], DD['HIGH_BASE_ACCURACY']) \
@@ -34,20 +47,6 @@ class Dueler:
             + user_stats.deaths * DD['DEATHMULT'] \
             + user_stats.misses * DD['MISSMULT']
         return min(strength, DD['STRENGTHCAP'])
-
-    def duel(self, target) -> None:
-        """Duel another dueler and get the outcome."""
-        # Find the outcome
-        if self.winner and target.winner:
-            self.outcome, target.outcome = (1, 1, 0), (1, 1, 0)
-        elif self.winner and not target.winner:
-            self.outcome, target.outcome = (1, 0, 0), (0, 1, 0)
-        elif not self.winner and target.winner:
-            self.outcome, target.outcome = (0, 1, 0), (1, 0, 0)
-        elif not self.winner and not target.winner:
-            self.outcome, target.outcome = (0, 0, 1), (0, 0, 1)
-        # Record the result
-        self._record_result(target)
 
     @db_session
     def _record_result(self, target) -> None:
