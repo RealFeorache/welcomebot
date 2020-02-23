@@ -8,12 +8,12 @@ PING_CHANNEL = -353404420
 
 # Duel constants
 # Maximum STR the bot can roll
-THRESHOLDCAP = 80
+THRESHOLDCAP = 85
 # Low and high accuracy that the user can get without exp
 LOW_BASE_ACCURACY = 40
-HIGH_BASE_ACCURACY = 50
+HIGH_BASE_ACCURACY = 45
 # Exp multiplier for kills, deaths and misses
-KILLMULT = 0.23
+KILLMULT = 0.35
 DEATHMULT = -0.13
 MISSMULT = -0.06
 # Always lose percent
