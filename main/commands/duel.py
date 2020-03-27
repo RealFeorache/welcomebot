@@ -91,7 +91,8 @@ def try_to_duel(update: Update, context: CallbackContext) -> None:
         update.message.reply_text(randomizer.choice(DUELS['bot']))
     elif target.user.id == init.user.id:
         message = randomizer.choice(DUELS['suicide'])
-        update.message.reply_text(message.replace('loser', init.tag))
+        update.message.reply_text(text=message.replace('loser', init.tag),
+                                  parse_mode='Markdown')
     else:
         init.duel(target)
         result = use_names(init, target).result()
