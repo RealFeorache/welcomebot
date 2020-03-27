@@ -29,10 +29,10 @@ def animal(update: Update, context: CallbackContext):
             'Сервер не работает, интересно. Попробуйте позже.')
         # Reset cooldown
         raise ResetError
-    response = response.json()
     # Try to send chat action, check if the bot has the right to send messages
     context.bot.send_chat_action(update.message.chat.id, 'upload_photo')
-    file_link = [item for item in response.values() if 'http' in str(item)][0]
+    file_link = [item for item in response.json().values()
+                 if 'http' in str(item)][0]
     file_extension = file_link.split('.')[-1]
     # Try to send it to the chat
     try:
