@@ -1,11 +1,12 @@
 """/pidor command."""
 
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, run_async
 from telegram.error import BadRequest
 
 from main import randomizer
 from main.database import *
+from main.constants import DEVS
 from main.helpers import antispam_passed, check_if_group_chat, ResetError
 
 
@@ -20,9 +21,20 @@ def pidor(update: Update, context: CallbackContext):
                          if q.chat_id == Chats[update.message.chat.id]
                          and q.day == date.today())[:][:]
     if pidor_today:
-        update.message.reply_text(f'Пидором дня является {pidor_today[0]}!')
+        update.message.reply_text(
+            text=f'Пидором дня является {pidor_today[0]}!')
         return
-    # Look for new pidor
+    keyboard = InlineKeyboardMarkup(
+        [[InlineKeyboardButton('Реролл #1 (только админы)', callback_data='Reroll.1')]])
+    update.message.reply_text(text=f'Пидором дня является {getnew(update).result()}!',
+                              parse_mode='Markdown',
+                              reply_markup=keyboard)
+
+
+@run_async
+@db_session
+def getnew(update: Update) -> str:
+    """Look for new pidor."""
     chat_users = select(q.user_id for q in User_Stats
                         if q.chat_id == Chats[update.message.chat.id])[:][:]
     # Find a pidor that's still in the chat and delete those that are gone.
@@ -44,7 +56,7 @@ def pidor(update: Update, context: CallbackContext):
                    and u.chat_id == Chats[update.message.chat.id])
             chat_users.remove(pidor)
     else:
-        update.message.reply_text('Нужно больше данных')
+        update.message.reply_text('Нужно больше данных!')
         raise ResetError
     # Assign a tag
     Users[pidor.id].full_name = pidor_data.user.full_name
@@ -56,8 +68,26 @@ def pidor(update: Update, context: CallbackContext):
     else:
         Pidors[Chats[update.message.chat.id]].user_id = pidor
         Pidors[Chats[update.message.chat.id]].day = date.today()
-    # Record and reply
+    # Record and return
     User_Stats[Users[pidor.id],
                Chats[update.message.chat.id]].times_pidor += 1
-    reply = f'Пидором дня является {pidor_tag}!'
-    update.message.reply_text(text=reply, parse_mode='Markdown')
+    return pidor_tag
+
+
+@run_async
+@db_session
+def reroll(update: Update, context: CallbackContext):
+    """Reroll pidor of the day."""
+    admins = [u.user for u in context.bot.get_chat_administrators(
+        update.callback_query.message.chat.id)]
+    if update.callback_query.from_user in admins or \
+            update.callback_query.from_user.id in DEVS:
+        rolln = int(
+            update.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data.split('.')[-1]) + 1
+        keyboard = InlineKeyboardMarkup(
+            [[InlineKeyboardButton(f'Реролл #{rolln} (только админы)',
+                                   callback_data=f'Reroll.{rolln}')]])
+        update.callback_query.message.edit_text(
+            text=f'Пидором дня является {getnew(update.callback_query).result()}!',
+            parse_mode='Markdown',
+            reply_markup=keyboard)

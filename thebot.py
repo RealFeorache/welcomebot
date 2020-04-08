@@ -1,7 +1,7 @@
 """Telegram bot based on python-telegram-bot with various commands."""
 
 from telegram.ext import (CommandHandler, Filters,
-                          MessageHandler)
+                          MessageHandler, CallbackQueryHandler)
 from datetime import time
 
 import main.commands as commands
@@ -71,6 +71,9 @@ def main():
     dispatcher.add_handler(MessageHandler(
         (Filters.text &
          ~Filters.update.edited_message), textfiltering.message_filter))
+    # Add callback handlers
+    dispatcher.add_handler(CallbackQueryHandler(commands.reroll,
+                                                pattern='Reroll'))
     # Log errors
     dispatcher.add_error_handler(error_callback)
     # Add job queue

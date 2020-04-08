@@ -9,7 +9,7 @@ from main.commands.duelranking import duelranking
 from main.commands.duelscore import duelscore
 from main.commands.flip import flip
 from main.commands.occasional import bothelp, start, whatsnew
-from main.commands.pidor import pidor
+from main.commands.pidor import pidor, reroll
 from main.commands.pidorme import pidorme
 from main.commands.pidorstats import pidorstats
 from main.commands.slap import slap
