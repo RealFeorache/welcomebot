@@ -24,8 +24,8 @@ def pidor(update: Update, context: CallbackContext):
         update.message.reply_text(
             text=f'Пидором дня является {pidor_today[0]}!')
         return
-    keyboard = InlineKeyboardMarkup(
-        [[InlineKeyboardButton('Реролл #1 (только админы)', callback_data='Reroll.1')]])
+    keyboard = InlineKeyboardMarkup.from_button(
+        InlineKeyboardButton('Реролл #1 (только админы)', callback_data='Reroll.1'))
     update.message.reply_text(text=f'Пидором дня является {getnew(update).result()}!',
                               parse_mode='Markdown',
                               reply_markup=keyboard)
@@ -84,9 +84,9 @@ def reroll(update: Update, context: CallbackContext):
             update.callback_query.from_user.id in DEVS:
         rolln = int(
             update.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data.split('.')[-1]) + 1
-        keyboard = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(f'Реролл #{rolln} (только админы)',
-                                   callback_data=f'Reroll.{rolln}')]])
+        keyboard = InlineKeyboardMarkup.from_button(
+            InlineKeyboardButton(f'Реролл #{rolln} (только админы)',
+                                 callback_data=f'Reroll.{rolln}'))
         update.callback_query.message.edit_text(
             text=f'Пидором дня является {getnew(update.callback_query).result()}!',
             parse_mode='Markdown',

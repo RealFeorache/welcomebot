@@ -4,6 +4,7 @@ from telegram.ext import CallbackContext
 from telegram.ext.dispatcher import run_async
 
 from main.helpers import record_data
+from main.constants import LEG_CHATS
 
 
 @run_async
@@ -21,7 +22,7 @@ def welcomer(update: Update, context: CallbackContext):
             else:
                 loc = 'нашем чате'
             reply = f'Приветствуем вас в {loc}, {new_member.full_name}!\n'
-            if update.message.chat.id in [-1001226124289, -1001445688548]:
+            if update.message.chat.id in LEG_CHATS:
                 reply += 'По традициям группы, с вас фото своих ног.'
         update.message.reply_text(text=reply, parse_mode='Markdown')
 

@@ -3,6 +3,7 @@
 # Admin id
 # Add developer ID for passing the spam check and other commands
 DEVS = [255295801, 205762941]
+LEG_CHATS = [-1001226124289, -1001445688548, -1001446909150]
 # Add a ping channel
 PING_CHANNEL = -353404420
 
